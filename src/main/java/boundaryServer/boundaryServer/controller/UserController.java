@@ -5,6 +5,7 @@ import boundaryServer.boundaryServer.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -13,7 +14,7 @@ public class UserController {
     final UserService userService;
 
     @Autowired
-    UserController(UserService userService){
+    UserController(UserService userService) {
         this.userService = userService;
     }
 
@@ -30,13 +31,28 @@ public class UserController {
     // 유저 등록 (회원가입)
     @PostMapping("/signup")
     public String registerUser(@RequestBody User user) {
-        userService.registerUser(user);
-        return "User registered: " + user.getUsername();
+        if (userService.isUserExists(user.getUsername())) {
+            return "Username already exists!";
+        }
+        User newUser =userService.registerUser(user);
+        return "User registered: " + newUser.getUsername();
     }
 
     // ID로 유저 조회
     @GetMapping("/{id}")
     public Optional<User> getUserById(@PathVariable Integer id) {
         return userService.getUserById(id);
+    }
+
+    // ID로 유저 조회
+    @GetMapping("/{id}")
+    public Optional<User> getUserByUsername(@PathVariable String username) {
+        return userService.getUserByUsername(username);
+    }
+
+    // 유저 전부 가져오기
+    @GetMapping("/all")
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
     }
 }
