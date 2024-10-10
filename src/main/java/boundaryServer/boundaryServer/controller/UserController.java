@@ -39,13 +39,13 @@ public class UserController {
     }
 
     // ID로 유저 조회
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public Optional<User> getUserById(@PathVariable Integer id) {
         return userService.getUserById(id);
     }
 
     // ID로 유저 조회
-    @GetMapping("/{id}")
+    @GetMapping("/name/{username}")
     public Optional<User> getUserByUsername(@PathVariable String username) {
         return userService.getUserByUsername(username);
     }
